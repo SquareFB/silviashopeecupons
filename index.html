@@ -130,9 +130,7 @@
   </div>
   <script>
     async function expandLink(url) {
-	  // import { handler } from '/api/expand.js';
-	  const response = await fetch(`${encodeURIComponent(url)}`);
-      // const response = await fetch(`/api/expand?url=${encodeURIComponent(url)}`);
+      const response = await fetch(`/api/expand?url=${encodeURIComponent(url)}`); //chama expand js script em \api
       const data = await response.json();
       if (data.expandedUrl) return data.expandedUrl;
       throw new Error(data.error || 'Failed to expand link.');
@@ -172,7 +170,6 @@
         let finalUrl = input;
         if (input.includes('s.shopee.')) {
           finalUrl = await expandLink(input);
-		  meuFinalUrl = finalUrl;
         }
         // Get clean base URL without any parameters
         //finalUrl = getCleanBaseURL(finalUrl);
