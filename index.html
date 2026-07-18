@@ -129,12 +129,38 @@
     <p class="small" id="copyStatus"></p>
   </div>
   <script>
-    async function expandLink(url) {
-      const response = await fetch(`/api/expand?url=${encodeURIComponent(url)}`); //chama expand js script em \api
-      const data = await response.json();
-      if (data.expandedUrl) return data.expandedUrl;
-      throw new Error(data.error || 'Failed to expand link.');
+    var request = new XMLHttpRequest();
+	var urlExpandida;
+    function expandLink(url) {
+      //const response = await fetch(`/api/expand?url=${encodeURIComponent(url)}`); //chama expand js script em \api
+      //const data = await response.json();
+      //if (data.expandedUrl) return data.expandedUrl;
+      //throw new Error(data.error || 'Failed to expand link.');
+	  request.onreadystatechange = processURL();
+      request.open('GET', url,false);
+      request.send();
+	  const data = urlExpandida;
+	  if (data) return data;
+	  throw new Error(data.error || 'Failed to expand link.');
     }
+	function processURL(){
+	  try{
+	    if (request.readyState== XMLHttpRequest.DONE){
+		  if (request.status==200){
+		    //alert(request.responseURL);
+			urlExpandida = request.responseURL;
+			request = new XMLHttpRequest();
+			//return request.responseURL;
+		  }
+		  else{
+			alert("An error has occured making the request" + request.status);
+		  }
+		}
+	  }
+	  catch(e){
+			alert('Caught Exception: ' + e.description);
+	  }	
+	}
     function generateSubId() {
       return 'vercel-user-click';
     }
